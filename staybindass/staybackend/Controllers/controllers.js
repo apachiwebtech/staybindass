@@ -1,7 +1,8 @@
 const db = require("../util/database");
 
 exports.getAddProperty = (req, res, next) => {
-  const sql = 'SELECT a.*,c.city as cityname,s.name as statename,h.home as homename,r.room as roomname,p.pool as poolname,n.night as nightname,d.title as destinationname,d.slug as destinationslug FROM `addproperty` as a left join `home_master` as h on h.id=a.h_type left join `room_master` as r on r.id=a.r_type left join `pool_master` as p on p.id=a.pool left join `night_master` as n on n.id=a.nights left join `destination_master` as d on d.id=a.destination left join `city_master` as c on c.id=a.city left join `awt_states` as s on s.id=a.state WHERE a.deleted != "1" and a.adminApproval="1" and a.villaStatus = "0"';
+  const sql =
+    'SELECT a.*,c.city as cityname,s.name as statename,h.home as homename,r.room as roomname,p.pool as poolname,n.night as nightname,d.title as destinationname,d.slug as destinationslug FROM `addproperty` as a left join `home_master` as h on h.id=a.h_type left join `room_master` as r on r.id=a.r_type left join `pool_master` as p on p.id=a.pool left join `night_master` as n on n.id=a.nights left join `destination_master` as d on d.id=a.destination left join `city_master` as c on c.id=a.city left join `awt_states` as s on s.id=a.state WHERE a.deleted != "1" and a.adminApproval="1" and a.villaStatus = "0"';
 
   db.query(sql, (err, data) => {
     if (err) {
@@ -13,7 +14,7 @@ exports.getAddProperty = (req, res, next) => {
 };
 
 exports.getHotelMenu = (req, res, next) => {
-  const sql = 'SELECT * from addproperty as ap  where ap.deleted=0;';
+  const sql = "SELECT * from addproperty as ap  where ap.deleted=0;";
 
   db.query(sql, (err, data) => {
     if (err) {
@@ -25,7 +26,7 @@ exports.getHotelMenu = (req, res, next) => {
 };
 
 exports.GetDestinationMaster = (req, res, next) => {
-  const sql = 'SELECT * from destination_master as ds  where ds.deleted=0;';
+  const sql = "SELECT * from destination_master as ds  where ds.deleted=0;";
 
   db.query(sql, (err, data) => {
     if (err) {
@@ -37,7 +38,7 @@ exports.GetDestinationMaster = (req, res, next) => {
 };
 
 exports.GetAwtMaster = (req, res, next) => {
-  const sql = 'SELECT * from awt_master as ds  where ds.deleted=0;';
+  const sql = "SELECT * from awt_master as ds  where ds.deleted=0;";
 
   db.query(sql, (err, data) => {
     if (err) {
@@ -55,7 +56,8 @@ exports.PostStayBindass = (req, res, next) => {
   let email = req.body.email;
   let mobile = req.body.mobile;
 
-  const sql = 'INSERT INTO awt_registeruser(`fullname`,`email`,`mobile`,`password`) values(?,?,?,?)';
+  const sql =
+    "INSERT INTO awt_registeruser(`fullname`,`email`,`mobile`,`password`) values(?,?,?,?)";
 
   db.query(sql, [fullname, email, mobile, password], (err, data) => {
     // if(data.length)  return res.status.json("user alredy exist");
@@ -71,7 +73,8 @@ exports.PostRegisterUser = (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
 
-  const sql = 'SELECT id, email, fullname, mobile, password  FROM awt_registeruser WHERE email = ? AND password = ?';
+  const sql =
+    "SELECT id, email, fullname, mobile, password  FROM awt_registeruser WHERE email = ? AND password = ?";
 
   db.query(sql, [email, password], (err, data) => {
     if (err) {
@@ -83,9 +86,14 @@ exports.PostRegisterUser = (req, res, next) => {
       let email = data[0].email;
       let fullname = data[0].fullname;
       let mobile = data[0].mobile;
-      return res.json({ userId: userId, email: email, fullname: fullname, mobile: mobile });
+      return res.json({
+        userId: userId,
+        email: email,
+        fullname: fullname,
+        mobile: mobile,
+      });
     } else {
-      return res.json({ error: 'Invalid credentials' });
+      return res.json({ error: "Invalid credentials" });
     }
   });
 };
@@ -101,15 +109,19 @@ exports.PostUpdateRegisteredUser = (req, res, next) => {
 
   const sql = `UPDATE awt_registeruser SET fullname=?, gender=?, mobile=?, address=?, describeYou=? WHERE id=?`;
 
-  db.query(sql, [fullname, gender, mobile, address, describeYou, id], (err, data) => {
-    db.query(sql, (err, data) => {
-      if (err) {
-        return res.json(err);
-      } else {
-        return res.json(data);
-      }
-    });
-  });
+  db.query(
+    sql,
+    [fullname, gender, mobile, address, describeYou, id],
+    (err, data) => {
+      db.query(sql, (err, data) => {
+        if (err) {
+          return res.json(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    }
+  );
 };
 
 exports.PostPropertyEnquiry = (req, res, next) => {
@@ -119,7 +131,8 @@ exports.PostPropertyEnquiry = (req, res, next) => {
   let property_type = req.body.property_type;
   let location = req.body.message;
 
-  const sql = 'INSERT INTO awt_yourpropertyform (`name`,`email`,`mobile`,`property_type`,`location`) values(?,?,?,?,?)';
+  const sql =
+    "INSERT INTO awt_yourpropertyform (`name`,`email`,`mobile`,`property_type`,`location`) values(?,?,?,?,?)";
 
   db.query(sql, [name, email, mobile, property_type, location], (err, data) => {
     if (err) {
@@ -134,8 +147,10 @@ exports.UpdatePassword = (req, res, next) => {
   let currentPassword = req.body.currentPassword;
   let password = req.body.password;
 
-  const checkPasswordQuery = 'SELECT id, email, fullname, mobile, password FROM awt_registeruser WHERE id = ?';
-  const updatePasswordQuery = 'UPDATE awt_registeruser SET password = ? WHERE id = ?';
+  const checkPasswordQuery =
+    "SELECT id, email, fullname, mobile, password FROM awt_registeruser WHERE id = ?";
+  const updatePasswordQuery =
+    "UPDATE awt_registeruser SET password = ? WHERE id = ?";
 
   db.query(checkPasswordQuery, [id], (err, data) => {
     if (err) {
@@ -149,13 +164,13 @@ exports.UpdatePassword = (req, res, next) => {
           if (err) {
             return res.json(err);
           }
-          return res.json({ message: 'Password updated successfully' });
+          return res.json({ message: "Password updated successfully" });
         });
       } else {
-        return res.json({ error: 'Incorrect current password' });
+        return res.json({ error: "Incorrect current password" });
       }
     } else {
-      return res.json({ error: 'User not found' });
+      return res.json({ error: "User not found" });
     }
   });
 };
@@ -163,9 +178,8 @@ exports.UpdatePassword = (req, res, next) => {
 exports.ConfirmBooking = (req, res, next) => {
   const id = req.body.userID; // Retrieve the ID from the query string
 
- 
-
-  const sql1 = 'SELECT * FROM confirm_booking WHERE userID = ? AND deleted = 0 ORDER BY id DESC';
+  const sql1 =
+    "SELECT * FROM confirm_booking WHERE userID = ? AND deleted = 0 ORDER BY id DESC";
 
   db.query(sql1, [id], (err, data) => {
     if (err) {
@@ -179,9 +193,8 @@ exports.ConfirmBooking = (req, res, next) => {
 exports.PostGetWish = (req, res, next) => {
   const id = req.body.userID; // Retrieve the ID from the query string
 
-  
-
-  const sql = 'SELECT * FROM wishlist_tbl WHERE userID = ? AND deleted = 0 ORDER BY id DESC';
+  const sql =
+    "SELECT * FROM wishlist_tbl WHERE userID = ? AND deleted = 0 ORDER BY id DESC";
 
   db.query(sql, [id], (err, data) => {
     if (err) {
@@ -207,16 +220,34 @@ exports.PostBookingPage = (req, res, next) => {
   let guest_email = req.body.guestemail;
   let guest_mobile = req.body.mobile;
 
- 
-  const sql = 'INSERT INTO property_booking (`userID`,`prop_slug`,`prop_name`,`prop_id`,`address`,`adults`,`children`,`room`,`guest_name`,`guest_email`,`guest_mobile`,`checkin`,`checkout`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+  const sql =
+    "INSERT INTO property_booking (`userID`,`prop_slug`,`prop_name`,`prop_id`,`address`,`adults`,`children`,`room`,`guest_name`,`guest_email`,`guest_mobile`,`checkin`,`checkout`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-  db.query(sql, [userID, prop_slug, prop_name, prop_id, address, adults, children, room, guest_name, guest_email, guest_mobile, checkin, checkout], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      return res.json(data);
+  db.query(
+    sql,
+    [
+      userID,
+      prop_slug,
+      prop_name,
+      prop_id,
+      address,
+      adults,
+      children,
+      room,
+      guest_name,
+      guest_email,
+      guest_mobile,
+      checkin,
+      checkout,
+    ],
+    (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        return res.json(data);
+      }
     }
-  });
+  );
 };
 
 exports.PostSearchComp = (req, res, next) => {
@@ -231,22 +262,38 @@ exports.PostSearchComp = (req, res, next) => {
 
   let created_date = new Date().toISOString();
 
-  const sql = 'INSERT INTO awt_property_search(`userid`,`cityid`,`cityname`,`from_date`,`to_date`,`adults`,`children`,`rooms`,`created_date`) values(?,?,?,?,?,?,?,?,?)';
+  const sql =
+    "INSERT INTO awt_property_search(`userid`,`cityid`,`cityname`,`from_date`,`to_date`,`adults`,`children`,`rooms`,`created_date`) values(?,?,?,?,?,?,?,?,?)";
 
-  db.query(sql, [userid,cityid, cityname, from_date, to_date, adults, children, room, created_date], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      console.log(data);
-      return res.json(data);
+  db.query(
+    sql,
+    [
+      userid,
+      cityid,
+      cityname,
+      from_date,
+      to_date,
+      adults,
+      children,
+      room,
+      created_date,
+    ],
+    (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        console.log(data);
+        return res.json(data);
+      }
     }
-  });
+  );
 };
 
 exports.PostPaymentPage = (req, res, next) => {
   const id = req.body.userID; // Retrieve the ID from the query string
 
-  const sql = 'SELECT * FROM property_booking WHERE userID = ? AND deleted = 0 ORDER BY id DESC LIMIT 1';
+  const sql =
+    "SELECT * FROM property_booking WHERE userID = ? AND deleted = 0 ORDER BY id DESC LIMIT 1";
 
   db.query(sql, [id], (err, data) => {
     if (err) {
@@ -261,7 +308,7 @@ exports.PostWishList = (req, res, next) => {
   let property_id = req.body.property_id;
   let user_id = req.body.user_id;
 
-  const sql = 'INSERT INTO wishlist_tbl (`property_id`,`userid`) values(?,?)';
+  const sql = "INSERT INTO wishlist_tbl (`property_id`,`userid`) values(?,?)";
 
   db.query(sql, [property_id, user_id], (err, data) => {
     if (err) {
@@ -276,7 +323,8 @@ exports.PostWishDelete = (req, res, next) => {
   let property_id = req.body.property_id;
   let user_id = req.body.userid;
 
-  const sql = 'UPDATE  wishlist_tbl SET deleted = 1 WHERE userid=? AND property_id = ?';
+  const sql =
+    "UPDATE  wishlist_tbl SET deleted = 1 WHERE userid=? AND property_id = ?";
 
   db.query(sql, [user_id, property_id], (err, data) => {
     if (err) {
@@ -291,39 +339,37 @@ exports.PostWishDelete = (req, res, next) => {
 exports.PostWishGet = (req, res, next) => {
   let user_id = req.body.user_id;
 
-  const sql = 'SELECT * from wishlist_tbl as wl left join addproperty as ap on wl.property_id=ap.id left join city_master as ct on ct.id=ap.city left join night_master as nm on nm.id=ap.nights WHERE userid=? AND wl.deleted != 1';
+  const sql =
+    "SELECT * from wishlist_tbl as wl left join addproperty as ap on wl.property_id=ap.id left join city_master as ct on ct.id=ap.city left join night_master as nm on nm.id=ap.nights WHERE userid=? AND wl.deleted != 1";
 
   db.query(sql, [user_id], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
-  
       return res.json(data);
     }
   });
 };
 
-exports.GetWishData =(req, res, next)=>{
+exports.GetWishData = (req, res, next) => {
   let user_id = req.body.user_id;
- 
 
-  const sql = 'SELECT property_id from wishlist_tbl where userid=? AND deleted != 1';
+  const sql =
+    "SELECT property_id from wishlist_tbl where userid=? AND deleted != 1";
 
-  db.query(sql ,[user_id] ,(err,data)=>{
-  if(err){
-    return res.json(err)
-  }
-  else{
-    return res.json(data)
-  }
-  })
-
-}
+  db.query(sql, [user_id], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json(data);
+    }
+  });
+};
 exports.PostCount = (req, res, next) => {
   let userid = req.body.userid;
- 
 
-  const sql = 'SELECT COUNT(*) as count FROM wishlist_tbl WHERE userid = ? AND deleted = 0';
+  const sql =
+    "SELECT COUNT(*) as count FROM wishlist_tbl WHERE userid = ? AND deleted = 0";
 
   db.query(sql, [userid], (err, data) => {
     if (err) {
@@ -336,56 +382,57 @@ exports.PostCount = (req, res, next) => {
 };
 
 exports.GetCurrentDeal = (req, res, next) => {
-  const currentDate = new Date(); 
-  const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD"
-  console.log(select_date)
-  var options = { weekday: 'long' };
-  var currentDay = currentDate.toLocaleDateString('en-US', options);
+  const currentDate = new Date();
+  const select_date = currentDate.toISOString().split("T")[0]; // Format: "YYYY-MM-DD"
+  console.log(select_date);
+  var options = { weekday: "long" };
+  var currentDay = currentDate.toLocaleDateString("en-US", options);
   console.log(currentDay);
-  const sql = 'SELECT ap.id,ap.title,ap.slug,app.property_price,night,pm.pool,cm.city,uploadimage,villaQuantity,minguest,maxguest,address,slug,r_type,minguest FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 0 and ap.deleted = 0 and  app.select_date = ?'
-
+  // const sql = 'SELECT ap.id,ap.title,ap.slug,app.property_price,night,pm.pool,cm.city,uploadimage,villaQuantity,minguest,maxguest,address,slug,r_type,minguest FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 0 and ap.deleted = 0 and  app.select_date = ?'
+  const sql =
+    "SELECT * FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id left join awt_default_property_price as adp on adp.property_id = ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 1 and ap.deleted = 0 and  app.select_date = ?";
   // const sql = 'SELECT * from awt_property_price as app left join addproperty as ap on app.property_id = ap.id left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool WHERE app.deleted = 0 AND select_date = ?';
-  db.query(sql,[select_date], (err, data) => {
-  if(err){
-    return res.json(err)
-  }
-  else{
-    console.log(data);
-    return res.json(data)
-  }
+  db.query(sql, [select_date], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      console.log(data, "current deal data");
+      return res.json(data);
+    }
   });
 };
 
 exports.GetListing = (req, res, next) => {
-  const sql = 'SELECT * FROM awt_property_search WHERE deleted=0 ORDER BY id DESC LIMIT 1'
-
+  const sql =
+    "SELECT * FROM awt_property_search WHERE deleted=0 ORDER BY id DESC LIMIT 1";
 };
 
 exports.GetCityList = (req, res, next) => {
-  db.query('SELECT c.id, c.city, s.name as statename FROM `city_master` as c LEFT JOIN `awt_states` as s ON s.`id` = c.`state` WHERE c.`deleted` != 1', (err, rows, fields) => {
-    if (!err)
-        res.send(rows);
-    else
-        console.log(err);
-    })
+  db.query(
+    "SELECT c.id, c.city, s.name as statename FROM `city_master` as c LEFT JOIN `awt_states` as s ON s.`id` = c.`state` WHERE c.`deleted` != 1",
+    (err, rows, fields) => {
+      if (!err) res.send(rows);
+      else console.log(err);
+    }
+  );
 };
 
 exports.PostContact = (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
   let subject = req.body.subject;
-  let message = req.body.message; 
+  let message = req.body.message;
 
-  const sql = 'INSERT INTO awt_contactform (`name` , `email` , `subject`, `message` ) values(?,?,?,?)'
+  const sql =
+    "INSERT INTO awt_contactform (`name` , `email` , `subject`, `message` ) values(?,?,?,?)";
 
-  db.query(sql,[name,email,subject,message], (err,data)=>{
-    if(err){
-      return res.json(err)
+  db.query(sql, [name, email, subject, message], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json(data);
     }
-    else{
-      return res.json(data)
-    }
-  })
+  });
 };
 
 exports.getAmenitiImages = (req, res, next) => {
@@ -402,17 +449,17 @@ exports.getAmenitiImages = (req, res, next) => {
 };
 
 exports.getGallery = (req, res, next) => {
-  let id = req.body.villaid; 
-  const sql = 'SELECT * FROM awt_vgallery WHERE v_id = ?';
-  
+  let id = req.body.villaid;
+  const sql = "SELECT * FROM awt_vgallery WHERE v_id = ?";
+
   db.query(sql, [id], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
       if (data.length === 0) {
-        return res.json({ message: 'No matching data found.' });
+        return res.json({ message: "No matching data found." });
       }
-      
+
       const matchedData = data;
 
       return res.json(matchedData);
@@ -439,58 +486,135 @@ exports.getGallery = (req, res, next) => {
 //     }
 //   })
 // }
-exports.GetDefaultPrice =(req, res, next)=>{
 
-  const id = req.body.property_id;
+// //workinggg
+// exports.GetDefaultPrice =(req, res, next)=>{
+
+//   const id = req.body.property_id;
+//   const currentDate = new Date();
+//   const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD";
+//   console.log(select_date);
+//   var options = { weekday: 'long' };
+//   var currentDay = currentDate.toLocaleDateString('en-US', options);
+//   console.log(currentDay);
+//   console.log(id);
+
+//   let array = [];
+//   // const sql = 'SELECT ap.id,ap.title,ap.slug,app.property_price,night,pm.pool,cm.city,uploadimage,villaQuantity,minguest,maxguest,address,slug,r_type,minguest FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 0 and ap.deleted = 0 and  app.select_date = ?';
+//   const sql = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?';
+
+//   db.query(sql, [ select_date], (err, data)=>{
+//     if(err){
+//      return res.json(err);
+//     }
+//     let property_price = data.length;
+
+//     console.log(data, "property_price");
+//     if(property_price > 0 ){
+
+//       console.log(property_price, "property price regular");
+//       // array[...data]
+//       return res.json(data);
+//     }
+//     else{
+//       const defaultPriceQuery = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 '
+
+//     db.query(defaultPriceQuery,(err, data)=>{
+//       if(err){
+//         return res.json(err);
+//       }else{
+//         return res.json(data);
+//       }
+//     })
+//     }
+//   })
+// }
+
+// exports.GetDefaultPrice =(req, res, next)=>{
+
+//   const id = req.body.property_id;
+//   const currentDate = new Date();
+//   const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD";
+//   console.log(select_date);
+//   var options = { weekday: 'long' };
+//   var currentDay = currentDate.toLocaleDateString('en-US', options).toLocaleLowerCase();
+//   console.log(currentDay);
+//   console.log(id);
+//  let availablePice ;
+//  let defaultPrice ;
+
+//   const sql = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?';
+
+//   db.query(sql, [ select_date], (err, data)=>{
+//     if(err){
+//      return res.json(err);
+//     }
+//     let property_price = data.length;
+
+//     console.log(data, "property_price");
+//     if(property_price > 0 ){
+
+//       console.log(property_price, "property price regular");
+//       // array[...data]
+//        availablePice = res.json(data);
+//       return availablePice;
+//     }
+
+//       const defaultPriceQuery = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 '
+
+//     db.query(defaultPriceQuery,(err, defaultdata)=>{
+//       if(err){
+//         return res.json(err);
+//       }else{
+//         defaultPrice = res.json(defaultdata)
+//         return defaultPrice;
+//       }
+//     })
+
+//   })
+//   console.log(defaultPrice + "default ", availablePice + "available");
+// }
+
+exports.GetDefaultPrice = (req, res, next) => {
   const currentDate = new Date();
-  const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD";
-  console.log(select_date);
-  var options = { weekday: 'long' };
-  var currentDay = currentDate.toLocaleDateString('en-US', options);
-  console.log(currentDay);
-  console.log(id);
-  const sql = `SELECT * 
-  FROM awt_property_price as ap left join addproperty as ad on ap.property_id = ad.id
-  WHERE ap.select_date = ? AND ad.deleted = 0 `;
+  const select_date = currentDate.toISOString().split("T")[0]; // Format: "YYYY-MM-DD";
 
-  db.query(sql, [ select_date], (err, data)=>{
-    if(err){
-     return res.json(err);
+  const sql =
+    "SELECT ap.id , app.property_price FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?";
+
+  db.query(sql, [select_date], (err, dataWithPrice) => {
+    if (err) {
+      return res.json(err);
     }
-    let property_price = data.length;
+
+    if (dataWithPrice.length > 0) {
+      const defaultPriceQuery =
+        "SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 ";
+
+      db.query(defaultPriceQuery, (err, dataWithDefaultPrice) => {
+        if (err) {
+          return res.json(err);
+        }
+
+        const combinedResult = mergeArrays(dataWithPrice, dataWithDefaultPrice, 'id');
+        return res.json(combinedResult);
+      });
+    }
+  });
+  function mergeArrays(arr1, arr2, uniqueField) {
+    // Combine the two arrays
+    const combined = [...arr2, ...arr1];
   
-    console.log(data, "property_price");
-    if(property_price > 0 ){
-       
-      console.log(property_price, "property price regular");
-      return res.json(data);
+    // Create a map to store unique objects based on the uniqueField
+    const uniqueMap = new Map();
+  
+    for (const item of combined) {
+      uniqueMap.set(item[uniqueField], item);
     }
-    else{
-      const defaultPriceQuery = `SELECT
-      CASE
-        WHEN ? = 'sunday' THEN sunday
-        WHEN ? = 'monday' THEN monday
-        WHEN ? = 'tuesday' THEN tuesday
-        WHEN ? = 'wednesday' THEN wednesday
-        WHEN ? = 'thursday' THEN thursday
-        WHEN ? = 'friday' THEN friday
-        WHEN ? = 'saturday' THEN saturday
-      END AS default_price
-    FROM awt_default_property_price
-    WHERE property_id = ? -- Add this condition to filter by property_id
-    ORDER BY updated_date DESC
-    LIMIT 1`
-
-    db.query(defaultPriceQuery, [currentDay, currentDay, currentDay, currentDay, currentDay, currentDay, currentDay, id], (err, data)=>{
-      if(err){
-        return res.json(err);
-      }
-
-      if(data.length > 0){
-        const defaultPrice = data;
-        return res.json({defaultPrice});
-      }
-    })
-    }
-  })
-}
+  
+    // Convert the uniqueMap values back to an array
+    const uniqueArray = Array.from(uniqueMap.values());
+  
+    return uniqueArray;
+  }
+};
