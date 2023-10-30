@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import useCount from '../utils/Count';
+import { useState, useEffect } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
+import useCount from "../utils/Count";
 
 const TodaysDeal = () => {
   const settings = {
@@ -40,8 +40,9 @@ const TodaysDeal = () => {
   const [villas, setvilla] = useState([]);
   const [wishdata, setwishdata] = useState([]);
 
+  const [data, setData] = useState([]);
   const fetchJson = () => {
-    fetch('http://localhost:8081/current_deal')
+    fetch("http://localhost:8081/current_deal")
       .then((response) => {
         return response.json();
       })
@@ -53,96 +54,129 @@ const TodaysDeal = () => {
     fetchJson();
   }, []);
 
-
   async function getwishdata() {
     const data = {
-      user_id: localStorage.getItem('userId')
-    }
-    axios.post("http://localhost:8081/wish_data", data)
+      user_id: localStorage.getItem("userId"),
+    };
+    axios
+      .post("http://localhost:8081/wish_data", data)
       .then((res) => {
-        setwishdata(res.data)
+        setwishdata(res.data);
       })
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }
 
   useEffect(() => {
-    getwishdata()
-
-  }, [])
+    getwishdata();
+  }, []);
 
   const { fetchData } = useCount();
 
-  const  navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onhandleClick = async (id) => {
     const data = {
       property_id: id,
-      user_id: localStorage.getItem('userId'),
+      user_id: localStorage.getItem("userId"),
     };
 
-    if (localStorage.getItem('userId') ===  null) {
-      navigate('/loginpage')
-    }
-    else {
+    if (localStorage.getItem("userId") === null) {
+      navigate("/loginpage");
+    } else {
       if (wishdata.some((item) => item.property_id === id)) {
-        await axios.post('http://localhost:8081/wish_delete', data);
-
+        await axios.post("http://localhost:8081/wish_delete", data);
       } else {
-        await axios.post('http://localhost:8081/wishlist', data);
-
+        await axios.post("http://localhost:8081/wishlist", data);
       }
-   
     }
 
-     
-
-    fetchData()
-    getwishdata()
+    fetchData();
+    getwishdata();
   };
 
+  const fetchPrice = () => {
+    axios
+      .get("http://localhost:8081/getDefault")
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchPrice();
+  }, []);
+  const names = data.map((obj) => obj.property_price);
+  console.log(names);
 
   return (
     <>
-      <div className='today-deal container'>
-        <div className='head-dest p-2'>
+      <div className="today-deal container">
+        <div className="head-dest p-2">
           <h2>Today's Deal</h2>
         </div>
 
-        <div className='t-datepicker'>
-          <div className='t-check-in'></div>
-          <div className='t-check-out'></div>
+        <div className="t-datepicker">
+          <div className="t-check-in"></div>
+          <div className="t-check-out"></div>
         </div>
 
         <Slider {...settings}>
-          {villas.map((item, index) => {
+          {data.map((item, index) => {
             return (
               <div key={index}>
-                <div style={{ position: 'relative' }}>
-                  <i className={wishdata.some((ele) => ele.property_id === item.property_id) ? 'bi bi-heart-fill heartbtn heartred' : 'bi bi-heart-fill heartbtn '} onClick={() => onhandleClick(item.property_id)}></i>
+                <div style={{ position: "relative" }}>
+                  <i
+                    className={
+                      wishdata.some(
+                        (ele) => ele.property_id === item.property_id
+                      )
+                        ? "bi bi-heart-fill heartbtn heartred"
+                        : "bi bi-heart-fill heartbtn "
+                    }
+                    onClick={() => onhandleClick(item.property_id)}
+                  ></i>
                 </div>
-                <Link to={`/hotelmenu/${item.property_id}/${item.property_price}`} key={item.id}>
-                  <div className='item card my-3 overflow-hidden' key={item.id}>
-                    <div className='img-fit'>
-                      <img src={'https://staybindass.com/upload/property_thumbnail/' + item?.uploadimage} alt='' />
-                      <p className='night-label '>{item.night} </p>
+                <Link
+                  to={`/hotelmenu/${item.property_id}/${item.property_price}`}
+                  key={item.id}
+                >
+                  <div className="item card my-3 overflow-hidden" key={item.id}>
+                    <div className="img-fit">
+                      <img
+                        src={
+                          "https://staybindass.com/upload/property_thumbnail/" +
+                          item?.uploadimage
+                        }
+                        alt=""
+                      />
+                      <p className="night-label ">{item.night} </p>
                     </div>
 
-                    <div className='info-part'>
+                    <div className="info-part">
                       <h4>{item?.title} </h4>
-                      <p className='dest-text'>
+                      <p className="dest-text">
                         {item?.city} , {item?.name} , India
                       </p>
-                      <p className='dest-text'>
-                        {item?.minguest} Guest | {item?.r_type} Bedrooms | {item?.pool}
+                      <p className="dest-text">
+                        {item?.minguest} Guest | {item?.r_type} Bedrooms |{" "}
+                        {item?.pool}
                       </p>
-                      <p className='dest-text'>
+                      <p className="dest-text">
                         <b>
-                          <span className='fs-5'>₹{item.property_price}</span> /night
+                          {item.property_price === 0 ? (
+                            <span className="fs-5">On Demand</span>
+                          ) : (
+                            <span className="fs-5">
+                              ₹{item.property_price} /night
+                            </span>
+                          )}
                         </b>
                       </p>
-                      <p className='extra-text'>(exc. taxes & charges)</p>
+                      <p className="extra-text">(exc. taxes & charges)</p>
                     </div>
                   </div>
                 </Link>

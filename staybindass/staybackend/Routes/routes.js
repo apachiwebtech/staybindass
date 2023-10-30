@@ -12,6 +12,7 @@ router.get('/awt_master', controller.GetAwtMaster);
 router.get('/current_deal', controller.GetCurrentDeal);
 router.get('/listing', controller.GetListing);
 router.get('/citylist', controller.GetCityList);
+router.get('/getDefault', controller.GetDefaultPrice);
 
 //post requests 
 router.post('/gallary', controller.getGallery);
