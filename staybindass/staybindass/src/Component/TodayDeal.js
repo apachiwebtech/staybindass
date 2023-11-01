@@ -47,7 +47,10 @@ const TodaysDeal = () => {
         return response.json();
       })
       .then((data) => {
+        console.log(data, "data");
         setvilla(data);
+      }).catch((err)=> {
+        console.log(err, "fetch Error");
       });
   };
   useEffect(() => {
@@ -109,8 +112,8 @@ const TodaysDeal = () => {
   useEffect(() => {
     fetchPrice();
   }, []);
-  const names = data.map((obj) => obj.property_price);
-  console.log(names);
+  // const names = data.map((obj) => obj.property_price);
+  // console.log(names);
 
   return (
     <>
@@ -125,7 +128,7 @@ const TodaysDeal = () => {
         </div>
 
         <Slider {...settings}>
-          {data.map((item, index) => {
+          {data?.map((item, index) => {
             return (
               <div key={index}>
                 <div style={{ position: "relative" }}>
@@ -168,7 +171,7 @@ const TodaysDeal = () => {
                       <p className="dest-text">
                         <b>
                           {item.property_price === 0 ? (
-                            <span className="fs-5">On Demand</span>
+                            <span className="fs-5">On Request</span>
                           ) : (
                             <span className="fs-5">
                               ₹{item.property_price} /night

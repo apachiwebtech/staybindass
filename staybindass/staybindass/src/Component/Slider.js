@@ -68,7 +68,8 @@ const SimpleSlider = () => {
           <Slider {...settings}>
             {villa.map((item) => {
               return (
-                <Link to={`/listing?search=${item.title}`} key={item.id}>
+                // <Link to={`/listing?search=${item.title}`} key={item.id}>
+                <Link to={`/listingNew/${item.title}`} key={item.id}>
                   <div className='item'>
                     <img src={'https://staybindass.com/upload/destination_master/' + item.logo} style={{width:"90px"}} alt='' />
                     <p>{item.title}</p>

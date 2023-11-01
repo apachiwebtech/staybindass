@@ -17,6 +17,7 @@ import ChangePass from './ChangePass';
 import ContactUs from './ContactUs';
 import Register from './Register';
 import PaymentPage from './PaymentPage'
+import NewListingPage from './NewListinPage';
 
 
 
@@ -45,6 +46,10 @@ const Routing = createBrowserRouter([
       {
         path: '/listing',
         element: <ListingPage />,
+      },
+      {
+        path: '/listingNew/:location',
+        element: <NewListingPage />,
       },
       {
         path: '/wishlist',
