@@ -9,7 +9,7 @@ const NewListingPage = (props) => {
   const [villa, setVilla] = useState([]);
   const [wishdata, setwishdata] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [hasProperty, setHasProperty] = useState(false);
+  
   const navigate = useNavigate();
   const { location } = useParams();
   useEffect(() => {
@@ -63,14 +63,7 @@ const NewListingPage = (props) => {
     getwishdata();
   };
 
-  useEffect(() => {
-    if (villa.length > 0) {
-      const propertiesWithCity = villa.filter((item) => item.city === location);
-      if (propertiesWithCity.length === 0) {
-        setHasProperty(false);
-      }
-    }
-  }, [villa, location]);
+
   console.log(villa, "dataaa");
   return (
     <div>
@@ -145,7 +138,7 @@ const NewListingPage = (props) => {
               </div>
             ))
         )}
-        {!loading && !hasProperty && <h2 style={{textAlign:"center"}}>No villas available at {location}</h2>}
+        {!loading && villa.filter((item) => item.city === location).length === 0 && <h2 style={{textAlign:"center"}}>No villas available at {location}</h2>}
       </div>
       <div>
         <Footer></Footer>
