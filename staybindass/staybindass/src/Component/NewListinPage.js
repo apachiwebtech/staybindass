@@ -145,7 +145,7 @@ const NewListingPage = (props) => {
               </div>
             ))
         )}
-        {!loading && !hasProperty && <p style={{textAlign:"center"}}>No villas available at {location}</p>}
+        {!loading && !hasProperty && <h2 style={{textAlign:"center"}}>No villas available at {location}</h2>}
       </div>
       <div>
         <Footer></Footer>

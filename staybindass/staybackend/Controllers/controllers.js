@@ -387,47 +387,15 @@ exports.GetCurrentDeal = (req, res, next) => {
   console.log(select_date);
   var options = { weekday: "long" };
   var currentDay = currentDate.toLocaleDateString("en-US", options);
-  // console.log(currentDay);
-  // const sql = 'SELECT ap.id,ap.title,ap.slug,app.property_price,night,pm.pool,cm.city,uploadimage,villaQuantity,minguest,maxguest,address,slug,r_type,minguest FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 0 and ap.deleted = 0 and  app.select_date = ?'
   const sql =
     "SELECT * FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id left join awt_default_property_price as adp on adp.property_id = ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 1 and ap.deleted = 0 and  app.select_date = ?";
-  // const sql = 'SELECT * from awt_property_price as app left join addproperty as ap on app.property_id = ap.id left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool WHERE app.deleted = 0 AND select_date = ?';
   db.query(sql, [select_date], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
-      // console.log(data, "current deal data");
       return res.json(data);
     }
   });
-
-  // const currentDate = new Date();
-  // const select_date = currentDate.toISOString().split("T")[0]; // Format: "YYYY-MM-DD";
-  // const options = {weekday : "long"};
-  // const currentDay = currentDate.toLocaleDateString('en-Us', options).toLocaleLowerCase();
-  // const sql =
-  //   "SELECT ap.id , app.property_price, ap.uploadimage, ap.title, cm.city, nm.night, slug, r_type,minguest , ap.pool FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?";
-
-  // db.query(sql, [select_date], (err, dataWithPrice) => {
-  //   if (err) {
-  //     return res.json(err);
-  //   }
-
-  //   if (dataWithPrice.length > 0) {
-  //     const defaultPriceQuery =
-  //       "SELECT * ,adp." + currentDay + " as property_price FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 ";
-
-  //     db.query(defaultPriceQuery, (err, dataWithDefaultPrice) => {
-  //       if (err) {
-  //         return res.json(err);
-  //       }
-
-  //       const combinedResult = mergeArrays(dataWithPrice, dataWithDefaultPrice, 'id');
-  //       console.log(combinedResult);
-  //       return res.json(combinedResult);
-  //     });
-  //   }
-  // });
 };
 
 exports.GetListing = (req, res, next) => {
@@ -470,7 +438,6 @@ exports.getAmenitiImages = (req, res, next) => {
     if (err) {
       return res.json(err);
     } else {
-      // console.log(data)
       return res.json(data);
     }
   });
@@ -494,114 +461,6 @@ exports.getGallery = (req, res, next) => {
     }
   });
 };
-
-// exports.GetDefaultPrice =(req, res, next)=>{
-
-//   const id = req.params.property_id;
-
-//   console.log(id);
-//   const sql = `SELECT property_id, property_price
-//   FROM awt_property_price
-//   WHERE property_id = ? AND deleted = 0
-//   ORDER BY property_price DESC
-//   LIMIT 1`;
-
-//   db.query(sql, [id], (err, data)=>{
-//     if(err){
-//      return res.json(err);
-//     }else{
-//       return res.json(data)
-//     }
-//   })
-// }
-
-// //workinggg
-// exports.GetDefaultPrice =(req, res, next)=>{
-
-//   const id = req.body.property_id;
-//   const currentDate = new Date();
-//   const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD";
-//   console.log(select_date);
-//   var options = { weekday: 'long' };
-//   var currentDay = currentDate.toLocaleDateString('en-US', options);
-//   console.log(currentDay);
-//   console.log(id);
-
-//   let array = [];
-//   // const sql = 'SELECT ap.id,ap.title,ap.slug,app.property_price,night,pm.pool,cm.city,uploadimage,villaQuantity,minguest,maxguest,address,slug,r_type,minguest FROM addproperty as ap left join awt_property_price as app on app.property_id=ap.id  left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool  WHERE ap.sale_status = 0 and ap.deleted = 0 and  app.select_date = ?';
-//   const sql = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?';
-
-//   db.query(sql, [ select_date], (err, data)=>{
-//     if(err){
-//      return res.json(err);
-//     }
-//     let property_price = data.length;
-
-//     console.log(data, "property_price");
-//     if(property_price > 0 ){
-
-//       console.log(property_price, "property price regular");
-//       // array[...data]
-//       return res.json(data);
-//     }
-//     else{
-//       const defaultPriceQuery = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 '
-
-//     db.query(defaultPriceQuery,(err, data)=>{
-//       if(err){
-//         return res.json(err);
-//       }else{
-//         return res.json(data);
-//       }
-//     })
-//     }
-//   })
-// }
-
-// exports.GetDefaultPrice =(req, res, next)=>{
-
-//   const id = req.body.property_id;
-//   const currentDate = new Date();
-//   const select_date = currentDate.toISOString().split('T')[0]; // Format: "YYYY-MM-DD";
-//   console.log(select_date);
-//   var options = { weekday: 'long' };
-//   var currentDay = currentDate.toLocaleDateString('en-US', options).toLocaleLowerCase();
-//   console.log(currentDay);
-//   console.log(id);
-//  let availablePice ;
-//  let defaultPrice ;
-
-//   const sql = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 and app.select_date = ?';
-
-//   db.query(sql, [ select_date], (err, data)=>{
-//     if(err){
-//      return res.json(err);
-//     }
-//     let property_price = data.length;
-
-//     console.log(data, "property_price");
-//     if(property_price > 0 ){
-
-//       console.log(property_price, "property price regular");
-//       // array[...data]
-//        availablePice = res.json(data);
-//       return availablePice;
-//     }
-
-//       const defaultPriceQuery = 'SELECT * FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_default_property_price as adp on adp.property_id = ap.id WHERE ap.sale_status = 1 and ap.deleted = 0 '
-
-//     db.query(defaultPriceQuery,(err, defaultdata)=>{
-//       if(err){
-//         return res.json(err);
-//       }else{
-//         defaultPrice = res.json(defaultdata)
-//         return defaultPrice;
-//       }
-//     })
-
-//   })
-//   console.log(defaultPrice + "default ", availablePice + "available");
-// }
 
 exports.GetDefaultPrice = (req, res, next) => {
   const currentDate = new Date();
@@ -667,8 +526,6 @@ exports.GetListingNew = (req, res, next) => {
   const currentDay = currentDate
     .toLocaleDateString("en-Us", options)
     .toLocaleLowerCase();
-  // console.log(currentDay)
-  // const currentDay = 'monday';
   console.log(currentDay);
   const sql =
     "SELECT ap.id , app.property_price, ap.uploadimage, ap.title, cm.city, nm.night, slug, r_type,minguest , ap.pool FROM addproperty as ap left join city_master as cm on ap.city = cm.id left join night_master as nm on nm.id = ap.nights left join awt_states as dm on dm.id=ap.state left join pool_master as pm on pm.id=ap.pool left join awt_property_price as app on app.property_id=ap.id WHERE ap.deleted = 0 and app.select_date = ? and ap.villaStatus = 0";
@@ -694,7 +551,6 @@ exports.GetListingNew = (req, res, next) => {
           dataWithDefaultPrice,
           "id"
         );
-        console.log(combinedResult);
         return res.json(combinedResult);
       });
     }
