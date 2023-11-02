@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate,Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import InnerHeader from "./InnerHeader";
 import Footer from "./Footer";
 import axios from "axios";
-import LinearProgress from '@mui/material/LinearProgress';
+import LinearProgress from "@mui/material/LinearProgress";
 
 const NewListingPage = (props) => {
   const [villa, setVilla] = useState([]);
@@ -15,12 +15,14 @@ const NewListingPage = (props) => {
   useEffect(() => {
     fetch(`http://localhost:8081/listingNew`)
       .then((response) => response.json())
-      .then((data) => {setVilla(data)
+      .then((data) => {
+        setVilla(data);
         setLoading(false);
-    }).catch((err)=>{
+      })
+      .catch((err) => {
         console.log(err);
         setLoading(false);
-    });
+      });
   }, [location]);
 
   async function getwishdata() {
@@ -42,30 +44,23 @@ const NewListingPage = (props) => {
   }, []);
 
   const onhandleClick = async (id) => {
-    console.log(id)
+    console.log(id);
     const data = {
       property_id: id,
-      user_id: localStorage.getItem('userId'),
+      user_id: localStorage.getItem("userId"),
     };
 
-    if (localStorage.getItem('userId') ===  null) {
-      navigate('/loginpage')
-    }
-    else {
+    if (localStorage.getItem("userId") === null) {
+      navigate("/loginpage");
+    } else {
       if (wishdata.some((item) => item.property_id === id)) {
-        await axios.post('http://localhost:8081/wish_delete', data);
-
+        await axios.post("http://localhost:8081/wish_delete", data);
       } else {
-        await axios.post('http://localhost:8081/wishlist', data);
-
+        await axios.post("http://localhost:8081/wishlist", data);
       }
-   
     }
 
-     
-
-   
-    getwishdata()
+    getwishdata();
   };
 
   useEffect(() => {
@@ -84,13 +79,11 @@ const NewListingPage = (props) => {
       </div>
 
       <div style={{ marginTop: "80px" }}>
-        
-          { 
-          loading ? ( 
-          <div >
-            <LinearProgress/>
+        {loading ? (
+          <div>
+            <LinearProgress />
           </div>
-        ) :(
+        ) : (
           villa
             .filter((item) => {
               return item.city === location;
@@ -100,7 +93,9 @@ const NewListingPage = (props) => {
                 <div style={{ position: "relative" }}>
                   <i
                     className={
-                      wishdata.some((ele) => ele.property_id === item.property_id)
+                      wishdata.some(
+                        (ele) => ele.property_id === item.property_id
+                      )
                         ? "bi bi-heart-fill heartbtn heartred"
                         : "bi bi-heart-fill heartbtn"
                     }
@@ -129,14 +124,17 @@ const NewListingPage = (props) => {
                         {item?.city} , {item?.name} , India
                       </p>
                       <p className="dest-text">
-                        {item?.minguest} Guest | {item?.r_type} Bedrooms | {item?.pool}
+                        {item?.minguest} Guest | {item?.r_type} Bedrooms |{" "}
+                        {item?.pool}
                       </p>
                       <p className="dest-text">
                         <b>
                           {item.property_price === 0 ? (
                             <span className="fs-5">On Request</span>
                           ) : (
-                            <span className="fs-5">₹{item.property_price} /night</span>
+                            <span className="fs-5">
+                              ₹{item.property_price} /night
+                            </span>
                           )}
                         </b>
                       </p>
@@ -146,8 +144,8 @@ const NewListingPage = (props) => {
                 </Link>
               </div>
             ))
-        )
-        }
+        )}
+        {!loading && !hasProperty && <p style={{textAlign:"center"}}>No villas available at {location}</p>}
       </div>
       <div>
         <Footer></Footer>
