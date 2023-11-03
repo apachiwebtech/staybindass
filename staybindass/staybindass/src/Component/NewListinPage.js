@@ -62,16 +62,14 @@ const NewListingPage = (props) => {
 
     getwishdata();
   };
-
-
-  console.log(villa, "dataaa");
+  console.log(villa.length, "dataaa");
   return (
     <div>
       <div>
         <InnerHeader />
       </div>
 
-      <div style={{ marginTop: "80px" }}>
+      <div style={{ marginTop: "5rem",marginBottom:"30px" }}>
         {loading ? (
           <div>
             <LinearProgress />
@@ -79,11 +77,11 @@ const NewListingPage = (props) => {
         ) : (
           villa
             .filter((item) => {
-              return item.city === location;
+              return item.dest_title === location;
             })
             .map((item, index) => (
               <div key={index}>
-                <div style={{ position: "relative" }}>
+                <div style={{ position: "relative"}}>
                   <i
                     className={
                       wishdata.some(
