@@ -112,8 +112,7 @@ const TodaysDeal = () => {
   useEffect(() => {
     fetchPrice();
   }, []);
-  // const names = data.map((obj) => obj.property_price);
-  // console.log(names);
+
 
   return (
     <>

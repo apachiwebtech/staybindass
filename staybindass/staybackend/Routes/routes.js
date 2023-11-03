@@ -32,5 +32,6 @@ router.post('/wish_delete', controller.PostWishDelete);
 router.post('/wish_get',controller.PostWishGet);
 router.post('/count', controller.PostCount);
 router.post('/contact', controller.PostContact);
+router.post('/wish_data', controller.GetWishData);
 
 module.exports = router;
