@@ -554,3 +554,13 @@ exports.GetListingNew = (req, res, next) => {
 };
 // serach query 
 
+
+// const ConvertDate=(date)=>{
+//   const parsseddate = new Date(date);
+//   const year = parsseddate.getFullYear();
+//   const month = (parsseddate.getMonth() + 1).toString().padStart(2, '0');
+// const day = parsseddate.getDate().toString().padStart(2, '0');;
+
+// const formattedDate = `${year}-${month}-${day}`;
+// return formattedDate;
+// }

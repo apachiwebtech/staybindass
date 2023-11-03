@@ -14,6 +14,7 @@ router.get('/listing', controller.GetListing);
 router.get('/citylist', controller.GetCityList);
 router.get('/getdefault', controller.GetDefaultPrice);
 router.get('/listingNew',controller.GetListingNew);
+// router.get('/searchlisting/:city/:adults/:children/:room/:fromdate/:todate', controller.GetSearchListing);
 //post requests 
 router.post('/gallary', controller.getGallery);
 router.post('/staybindass', controller.PostStayBindass);
