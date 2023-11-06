@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InnerHeader from './InnerHeader';
 import axios from 'axios';
+import { isValidEmail } from '../utils/isValidEmail';
 
 const ContactUs = () => {
 
@@ -11,14 +12,59 @@ const ContactUs = () => {
     message : '',
   })
 
-  const handleSubmit = () =>{
-  axios.post('http://localhost:8081/contact' , value)
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  })
+  const handleSubmit = (event) =>{
+
+    event.preventDefault();
+
+    if(validateForm()){
+      axios.post('http://localhost:8081/contact' , value)
+    }
   }
 
   const handleChange = (event) => {
+    setErrors((prev)=> ({...prev, [event.target.name] : ""}));
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
   
+  const validateForm=()=>{
+    const newErrors = {...errors};
+
+    if(!value.name.trim()){
+      newErrors.name = "Name is required";
+    }else{
+      newErrors.name = "";
+    }
+
+    if(!value.email.trim()){
+      newErrors.email = "Email is required"
+    }else if (!isValidEmail(value.email)){
+      newErrors.email = "Invalid Email format";
+    }else {
+      newErrors.email = "";
+    }
+
+    if(!value.subject.trim()){
+      newErrors.subject = "Subject is required"
+    }else {
+      newErrors.subject = "";
+    }
+
+    if(!value.message.trim()){
+      newErrors.message = "Message is  required"
+    }else {
+      newErrors.message = "";
+    }
+
+    setErrors(newErrors);
+
+    return Object.values(newErrors).every((error) => error === '');
+  }
   return (
     <>
       <InnerHeader />
@@ -36,7 +82,7 @@ const ContactUs = () => {
                 Enter Full Name
               </label>
               <input type='text' className='form-control' id='' onChange={handleChange} name="name" />
-              <span id=''></span>
+              <span id=''>{errors.name}</span>
             </div>
 
             <div className='mb-3 '>
@@ -44,7 +90,7 @@ const ContactUs = () => {
                 Enter Email
               </label>
               <input type='email' className='form-control' id='' onChange={handleChange}  name="email"/>
-              <span id=''></span>
+              <span id=''>{errors.email}</span>
             </div>
 
             <div className='mb-3'>
@@ -52,7 +98,7 @@ const ContactUs = () => {
                 Subject
               </label>
               <input type='text' className='form-control' id='' onChange={handleChange} name="subject" />
-              <span id=''></span>
+              <span id=''>{errors.subject}</span>
             </div>
 
             <div class=' mb-3'>
@@ -60,6 +106,7 @@ const ContactUs = () => {
                 Your Message
               </label>
               <textarea class='form-control' id='floatingTextarea2' style={{ height: '100px' }} onChange={handleChange} name='message'></textarea>
+              <span id=''>{errors.message}</span>
             </div>
 
             
