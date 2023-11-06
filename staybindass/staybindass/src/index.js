@@ -9,9 +9,15 @@ import './assets/style.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-
+// import StoreProvider from './Store/storeProvider';
+import { Provider } from 'react-redux';
+import store from './Store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<RouterProvider router={Routing} />);
+root.render(
+    <Provider store={store}>
+<RouterProvider router={Routing} />
+</Provider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
