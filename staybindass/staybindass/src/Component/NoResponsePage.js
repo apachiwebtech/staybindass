@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "./Header";
 
 const NoResponsePage = () => {
   return (
     <>
-      <Header />
-      <main className="grid min-h-full place-items-center bg-white py-24 px-6 sm:py-32 lg:px-8 mt80">
-        <div className="text-center">
-          {/* <img src={logo} alt='' style={{ width: '200px', fill: "#FF0000" }} /> */}
-          <svg
-            width="200"
-            height="auto"
+
+      <main style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", height: "80vh" }}>
+        <div style={{overflow:"hidden"}}>
+          <div>
+
+          <svg  
+            width="12rem"
+            height="12rem"
             viewBox="0 0 26 26"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -49,15 +49,19 @@ const NoResponsePage = () => {
               fill="#AB2440"
             />
           </svg>
-
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Opps's, we couldn't find any results
-          </h1>
-          <p style={{ fontSize: "1.2rem" }}>
-            Try searching for something else.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link to="/">Go back home</Link>
+          <div>
+              <h1>
+              Opps, we couldn't find any results.
+              </h1>
+              <p style={{fontSize:"1rem"}}>
+                Try searching for something else.
+              </p>
+              <p>
+                <Link to='/'>
+                  Go back to Home.
+                </Link>
+              </p>
+          </div>
           </div>
         </div>
       </main>
