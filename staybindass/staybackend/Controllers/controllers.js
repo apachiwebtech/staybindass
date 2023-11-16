@@ -322,8 +322,8 @@ exports.PostWishDelete = (req, res, next) => {
   let property_id = req.body.property_id;
   let user_id = req.body.user_id;
 
-  console.log(property_id);
-  console.log(user_id);
+  // console.log(property_id);
+  // console.log(user_id);
 
   const sql =
     "UPDATE  wishlist_tbl SET deleted = 1 WHERE userid=? AND property_id = ?";
@@ -354,7 +354,7 @@ exports.PostWishGet = (req, res, next) => {
 
 exports.GetWishData = (req, res, next) => {
   let user_id = req.body.user_id;
-  console.log(user_id)
+  // console.log(user_id)
 
   const sql =
     "SELECT property_id from wishlist_tbl where userid=? AND deleted != 1";
@@ -480,7 +480,7 @@ exports.GetDefaultPrice = (req, res, next) => {
       return res.json(err);
     }
 
-    if (dataWithPrice.length > 0) {
+    if (dataWithPrice.length >= 0) {
       const defaultPriceQuery =
         "SELECT * ,adp." +
         currentDay +
