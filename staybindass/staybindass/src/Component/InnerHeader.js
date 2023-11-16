@@ -6,7 +6,7 @@ const InnerHeader = () => {
   return (
     <div className='d-flex align-items-center innerhead' style={{height : "80px", width: "100%"}}>
       <div className='round' style={{marginLeft : "10px"}}>
-        <i onClick={() => navigate(-1)} class='bi bi-arrow-left' ></i>
+        <i onClick={() => navigate(-1)} className='bi bi-arrow-left' ></i>
       </div>
       <div>
 

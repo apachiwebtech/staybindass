@@ -51,7 +51,6 @@ exports.GetAwtMaster = (req, res, next) => {
 
 exports.PostStayBindass = (req, res, next) => {
   let password = req.body.password;
-  // const hashPassword = hash.MD5(password)
   let fullname = req.body.fullname;
   let email = req.body.email;
   let mobile = req.body.mobile;
@@ -62,7 +61,7 @@ exports.PostStayBindass = (req, res, next) => {
   db.query(sql, [fullname, email, mobile, password], (err, data) => {
     // if(data.length)  return res.status.json("user alredy exist");
     if (err) {
-      return res.json(err);
+      return res.json({name : "wrong credentials"});
     } else {
       return res.json(data);
     }
@@ -261,7 +260,7 @@ exports.PostSearchComp = (req, res, next) => {
   let room = req.body.room;
 
   let created_date = new Date().toISOString();
-  console.log(userid, cityid, cityname, from_date, to_date, adults, children, room);
+
   const sql =
     "INSERT INTO awt_property_search(`userid`,`cityid`,`cityname`,`from_date`,`to_date`,`adults`,`children`,`rooms`,`created_date`) values(?,?,?,?,?,?,?,?,?)";
 
@@ -322,8 +321,7 @@ exports.PostWishDelete = (req, res, next) => {
   let property_id = req.body.property_id;
   let user_id = req.body.user_id;
 
-  console.log(property_id);
-  console.log(user_id);
+
 
   const sql =
     "UPDATE  wishlist_tbl SET deleted = 1 WHERE userid=? AND property_id = ?";
@@ -354,7 +352,6 @@ exports.PostWishGet = (req, res, next) => {
 
 exports.GetWishData = (req, res, next) => {
   let user_id = req.body.user_id;
-  console.log(user_id)
 
   const sql =
     "SELECT property_id from wishlist_tbl where userid=? AND deleted != 1";
